@@ -1,0 +1,67 @@
+package maven1;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+public class Main {
+	public static void main(String[] args) {
+
+		stringify();
+
+		parse();
+
+		parse_complex();
+	}
+
+	private static void parse_complex() {
+		String json = """
+				{
+				  "user": { "name": "Mike", "age": 35 },
+				  "skills": ["Java", "SQL", "Python"]
+				}
+				""";
+
+		JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+		JsonObject user = obj.getAsJsonObject("user");
+		System.out.println("Name: " + user.get("name").getAsString());
+		System.out.println("First skill: " + obj.getAsJsonArray("skills").get(0).getAsString());
+
+	}
+
+	private static void parse() {
+		// JSON to Object
+		Gson gson = new Gson();
+		String jsonString = "{\"name\":\"Mike\",\"age\":35}";
+		Person p2 = gson.fromJson(jsonString, Person.class);
+		System.out.println("Name: " + p2.getName() + ", Age: " + p2.getAge());
+	}
+
+	private static void stringify() {
+		Gson gson = new Gson();
+
+		// Object to JSON
+		Person person = new Person("Mike", 35);
+		String json = gson.toJson(person);
+		System.out.println("JSON: " + json);
+
+	}
+}
+
+class Person {
+	private String name;
+	private int age;
+
+	public Person(String name, int age) {
+		this.name = name;
+		this.age = age;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+}
